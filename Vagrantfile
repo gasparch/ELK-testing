@@ -32,6 +32,7 @@ Vagrant.configure(2) do |config|
 		# run all scripts together in single command, so vagrant-cachier will run one time only
 		instance.vm.provision :shell, :path => "all_shell_tasks_together.sh", :args => "wallabag"
 		instance.vm.network :private_network, ip: "192.168.34.8"
+		instance.vm.network "forwarded_port", guest: 80, host: 8000
 	end
 
 	config.vm.define "kibana", autostart: false do |instance|

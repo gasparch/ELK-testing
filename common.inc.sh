@@ -30,8 +30,18 @@ case $1 in
 		exit 5
 esac
 
+case $TARGET_ENVIRONMENT in
+	wallabag)
+		SERVICE_LIST_TO_ENABLE="apache2 mysql"
+	;;
+	kibana)
+		SERVICE_LIST_TO_ENABLE="elasticsearch kibana"
+	;;
+esac
+
 MYSQL_PASS_FILE=/root/.mypassword
 WALLABAG_PASS_FILE=/root/.wallabag_password
+WALLABAG_DIR=/opt/wallabag-install
 
 ################################################################################
 # UTILITY FUNCTIONS

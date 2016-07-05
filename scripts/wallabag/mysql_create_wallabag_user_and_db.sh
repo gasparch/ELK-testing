@@ -1,6 +1,7 @@
 #!/bin/sh
 
 CWD=$(dirname $(readlink -f $0))
+CWD=${CWD%scripts/*}
 cd $CWD
 
 . $CWD/common.inc.sh
