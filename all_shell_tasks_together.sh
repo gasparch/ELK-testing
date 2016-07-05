@@ -10,7 +10,7 @@ case $TARGET in
 	grafana) TASKS="";;
 esac
 
-TASKS=""
+#TASKS="install_mysql"
 TASKS="update_apt_index install_utils configure_tz $TASKS"
 
 LOG_BASE=/vagrant/logs/$TARGET/

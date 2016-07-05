@@ -13,6 +13,9 @@ WALLABAG_DB_NAME="wallabag"
 WALLABAG_DB_USER="wallabag"
 WALLABAG_DOMAIN="example.com"
 
+WALLABAG_ADMIN_USER="test1"
+WALLABAG_ADMIN_PASS="test1"
+WALLABAG_ADMIN_EMAIL="test1@test.com"
 
 
 ################################################################################
