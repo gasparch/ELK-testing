@@ -1,0 +1,5 @@
+
+192.168.34.8  wallabag wallabag.example.com
+192.168.34.9  kibana   kibana.example.com
+192.168.34.10 grafana  grafana.example.com
+
