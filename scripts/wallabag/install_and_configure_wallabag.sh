@@ -6,25 +6,23 @@ cd $CWD
 
 . $CWD/common.inc.sh
 
-
+# always re-provision wallabag
+rm -rf $WALLABAG_DIR
 mkdir -p $WALLABAG_DIR 
 cd $WALLABAG_DIR
 
-checkout_wallabag_from_git () {# {{{
+checkout_wallabag_from_git () { # {{{
 	# speedup checkout by shallow clone
 	git clone --depth 1 https://github.com/wallabag/wallabag.git -b ${WALLABAG_VERSION} $WALLABAG_DIR
-	return $?
 } # }}}
 
-generate_wallabag_config () {# {{{
+generate_wallabag_config () { # {{{
 	WALLABAG_DB_PASS=`cat $WALLABAG_PASS_FILE`
 	cat $CWD/files/wallabag/wallabag-config.yml | sed -e "s/%%DB%%/${WALLABAG_DB_NAME}/g" -e "s/%%USER%%/${WALLABAG_DB_USER}/g" -e "s#%%PASS%%#${WALLABAG_DB_PASS}#g" -e "s/%%DOMAIN%%/${WALLABAG_DOMAIN}/g" > $WALLABAG_DIR/app/config/parameters.yml
-	return $?
-} #}}}
+} # }}}
 
 install_wallabag_dependencies () { # {{{
 	SYMFONY_ENV=prod composer install --no-dev -o --prefer-dist
-	return $?
 } # }}}
 
 configure_wallabag_installation () { # {{{
