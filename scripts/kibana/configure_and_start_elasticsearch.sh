@@ -8,7 +8,7 @@ cd $CWD
 
 copy_elasticsearch_configs () { # {{{
 	mv /etc/elasticsearch/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml.orig
-	cp $CWD/files/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
+	cp $CWD/files/kibana/elasticsearch-config.yml /etc/elasticsearch/elasticsearch.yml
 } # }}}
 
 wait_for_elasticsearch_restart() { # {{{
@@ -18,7 +18,7 @@ wait_for_elasticsearch_restart() { # {{{
 } # }}}
 
 upload_filebeat_index_template () { # {{{
-	curl -XPUT 'http://localhost:9200/_template/filebeat?pretty' -d@$CWD/files/elasticsearch-filebeat-index-template.json
+	curl -XPUT 'http://localhost:9200/_template/filebeat?pretty' -d@$CWD/files/kibana/elasticsearch-filebeat-index-template.json
 } # }}}
 
 copy_elasticsearch_configs &&

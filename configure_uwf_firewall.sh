@@ -1,5 +1,7 @@
 
 
+# put per-host port configuration here
+
 
 # Enable Ubuntu Firewall and allow SSH & MySQL Ports
 ufw enable

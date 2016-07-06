@@ -8,7 +8,7 @@ cd $CWD
 
 copy_filebeat_config () {
 	mv /etc/filebeat/filebeat.yml /etc/filebeat/filebeat.yml.orig
-	cp $CWD/files/wallabag-filebeat.yml /etc/filebeat/filebeat.yml
+	cp $CWD/files/wallabag/wallabag-filebeat.yml /etc/filebeat/filebeat.yml
 }
 
 copy_logstash_ssl_cert () { # {{{

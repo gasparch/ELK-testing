@@ -1,5 +1,4 @@
-server.host: "kibana.external.com"
-
+# server.host: "kibana.external.com"
 # Kibana is served by a back end server. This setting specifies the port to use.
 # server.port: 5601
 

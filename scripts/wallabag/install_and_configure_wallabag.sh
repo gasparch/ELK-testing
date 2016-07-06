@@ -18,7 +18,7 @@ checkout_wallabag_from_git () {# {{{
 
 generate_wallabag_config () {# {{{
 	WALLABAG_DB_PASS=`cat $WALLABAG_PASS_FILE`
-	cat $CWD/files/parameters.yml | sed -e "s/%%DB%%/${WALLABAG_DB_NAME}/g" -e "s/%%USER%%/${WALLABAG_DB_USER}/g" -e "s#%%PASS%%#${WALLABAG_DB_PASS}#g" -e "s/%%DOMAIN%%/${WALLABAG_DOMAIN}/g" > $WALLABAG_DIR/app/config/parameters.yml
+	cat $CWD/files/wallabag/wallabag-config.yml | sed -e "s/%%DB%%/${WALLABAG_DB_NAME}/g" -e "s/%%USER%%/${WALLABAG_DB_USER}/g" -e "s#%%PASS%%#${WALLABAG_DB_PASS}#g" -e "s/%%DOMAIN%%/${WALLABAG_DOMAIN}/g" > $WALLABAG_DIR/app/config/parameters.yml
 	return $?
 } #}}}
 
