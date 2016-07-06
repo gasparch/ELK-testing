@@ -30,12 +30,26 @@ case $1 in
 		exit 5
 esac
 
+if [ -z $CWD ]; then
+cat <<EOF
+CWD is not defined in script, start each script with this snippet
+
+#!/bin/sh
+CWD=\$(dirname \$(readlink -f \$0))
+CWD=\${CWD%scripts/*}
+cd \$CWD
+
+. \$CWD/common.inc.sh
+EOF
+exit 5
+fi
+
 case $TARGET_ENVIRONMENT in
 	wallabag)
-		SERVICE_LIST_TO_ENABLE="apache2 mysql"
+		SERVICE_LIST_TO_ENABLE="apache2 mysql filebeat"
 	;;
 	kibana)
-		SERVICE_LIST_TO_ENABLE="elasticsearch kibana"
+		SERVICE_LIST_TO_ENABLE="elasticsearch kibana logstash"
 	;;
 esac
 
@@ -43,9 +57,18 @@ MYSQL_PASS_FILE=/root/.mypassword
 WALLABAG_PASS_FILE=/root/.wallabag_password
 WALLABAG_DIR=/opt/wallabag-install
 
+SSLCA_ROOT=$CWD/files/SSLCA/
+LOGSTASH_KEY=$SSLCA_ROOT/private/logstash-forwarder.key
+LOGSTASH_CRT=$SSLCA_ROOT/certs/logstash-forwarder.crt
+
+# $ELK_SERVER_NAME should be same as in files/hosts_config
+ELK_SERVER_NAME=kibana
+
 ################################################################################
 # UTILITY FUNCTIONS
 
+# use to add ppa:// urls 
+# apt_add_repository REPO_NAME
 apt_add_repository () {
 	REPO=$1
 	add-apt-repository -y ${REPO}
@@ -59,10 +82,14 @@ apt_install_package () {
 	apt_install_packages $1
 }
 
+# installs one or more packages
+# apt_install_packages PKG1 [PKG2 ...]
 apt_install_packages () {
 	apt-get install -y $@
 }
 
+# checks if package is installed
+# check_package_installed PACKAGE_NAME
 check_package_installed () {
 	PACKAGE_NAME=$1
 
@@ -70,3 +97,39 @@ check_package_installed () {
 
 	return $?
 }
+
+# service_restart SERVICE_NAME
+service_restart () {
+	SERVICE=$1
+	service $SERVICE restart
+}
+
+# service_start SERVICE_NAME
+service_start () {
+	SERVICE=$1
+	service $SERVICE start
+}
+
+# retry to connect to REST service several times until positive response is
+# received or reached max retry count
+# wait_for_REST_service URL SECONDS_TO_WAIT
+wait_for_REST_service () {
+	local URL TRIES I
+	URL=$1
+	TRIES=$2 || 10
+
+	I=0
+	while [ $I -lt $TRIES ]; do
+		I=$(($I+1))
+		if curl -XGET $URL > /dev/null 2>&1; then
+			# got positive response
+			return 0
+		else
+			sleep 1
+		fi
+	done
+
+	# failed to connect
+	return 1
+}
+

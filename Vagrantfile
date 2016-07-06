@@ -27,7 +27,7 @@ Vagrant.configure(2) do |config|
 		vb.linked_clone = true if Vagrant::VERSION =~ /^1.8/
 	end
 
-	config.vm.define "wallabag", autostart: false do |instance|
+	config.vm.define "wallabag", autostart: true do |instance|
 		instance.vm.hostname = "wallabag.example.com"
 		# run all scripts together in single command, so vagrant-cachier will run one time only
 		instance.vm.provision :shell, :path => "all_shell_tasks_together.sh", :args => "wallabag"
@@ -35,17 +35,18 @@ Vagrant.configure(2) do |config|
 		instance.vm.network "forwarded_port", guest: 80, host: 8000
 	end
 
-	config.vm.define "kibana", autostart: false do |instance|
+	config.vm.define "kibana", autostart: true do |instance|
 		instance.vm.hostname = "kibana.example.com"
 		# run all scripts together in single command, so vagrant-cachier will run one time only
 		instance.vm.provision :shell, :path => "all_shell_tasks_together.sh", :args => "kibana"
 		instance.vm.network :private_network, ip: "192.168.34.9"
+		instance.vm.network "forwarded_port", guest: 5601, host: 8001
 	end
 
 	config.vm.define "grafana", autostart: false do |instance|
 		instance.vm.hostname = "grafana.example.com"
 		# run all scripts together in single command, so vagrant-cachier will run one time only
-		instance.vm.provision :shell, :path => "all_shell_tasks_together.sh grafana"
+		instance.vm.provision :shell, :path => "all_shell_tasks_together.sh", :args => "grafana"
 		instance.vm.network :private_network, ip: "192.168.34.10"
 	end
 end

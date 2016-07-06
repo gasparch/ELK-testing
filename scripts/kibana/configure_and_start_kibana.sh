@@ -6,7 +6,10 @@ cd $CWD
 
 . $CWD/common.inc.sh
 
-exit 
+copy_kibana_config () {
+	mv /opt/kibana/config/kibana.yml /opt/kibana/config/kibana.yml.orig
+	cp $CWD/files/kibana.yml /opt/kibana/config/kibana.yml
+}
 
-#sed /etc/elasticsearch/elasticsearch.yml network.host: localhost
-
+copy_kibana_config &&
+service_restart kibana

@@ -4,15 +4,27 @@ TARGET=$1
 TEST=$2
 
 case $TARGET in
-	wallabag) TASKS="install_apache2 install_mysql mysql_secure_installation install_php_5_6 install_php_composer mysql_create_wallabag_user_and_db install_and_configure_wallabag configure_wallabag_apache_vhost"
+	wallabag) TASKS="install_apache2 install_mysql mysql_secure_installation \
+		install_php_5_6 install_php_composer \
+		mysql_create_wallabag_user_and_db \
+		install_and_configure_wallabag \
+		configure_wallabag_apache_vhost\
+		install_elastic_co_key \
+		install_filebeat \
+		configure_filebeat_on_wallabag"
 		;;
-	kibana) TASKS="install_java8" # install_elasticsearch configure_and_start_elasticsearch"
+	kibana) TASKS="install_java8 \
+		install_elastic_co_key \
+		install_ELK_stack \
+		configure_and_start_elasticsearch \
+		configure_and_start_kibana \
+		configure_and_start_logstash"
 		;;
 	grafana) TASKS="";;
 esac
 
 #TASKS="install_mysql"
-TASKS="update_apt_index install_utils configure_tz $TASKS enable_services"
+TASKS="update_apt_index install_utils add_hosts configure_tz generate_ssl_keys $TASKS enable_services"
 
 LOG_BASE=/vagrant/logs/$TARGET/
 mkdir -p $LOG_BASE
